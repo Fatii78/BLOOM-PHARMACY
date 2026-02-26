@@ -1,45 +1,52 @@
-require("dotenv").config({ quiet: true })
+require("dotenv").config()
 const express = require("express")
-const methodOverride = require("method-override")
+const mongoose = require("mongoose")
 const morgan = require("morgan")
+const methodOverride = require("method-override")
 const session = require("express-session")
-
-const { MongoStore } = require("connect-mongo")
-
+const MongoStore = require("connect-mongo").default
 const path = require("path")
 
 const app = express()
-app.set("view engine", "ejs")
-app.set("views", path.join(__dirname, "views"))
 
-
-const authRouter = require("./routes/authRouter")
-
-
-
-const PORT = 3000
-
+// Middleware
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
-app.use(express.static(path.join(__dirname, "public")))
-app.use(methodOverride("_method"))
 app.use(morgan("dev"))
+app.use(methodOverride("_method"))
+app.use(express.static(path.join(__dirname, "public")))
+
+// Session
 app.use(
-session({
-secret: process.env.SESSION_SECRET,
-resave: false,
-saveUninitialized: true,
-store: MongoStore.create({
-mongoUrl: process.env.MONGODB_URI,
-}),
-}),
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI
+    })
+  })
 )
 
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null
+  next()
+})
 
-app.use("/auth", authRouter)
+app.set("view engine", "ejs")
 
+// DB
+mongoose.connect(process.env.MONGODB_URI)
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB connected")
+})
 
+// Routes
+app.get("/", (req, res) => {
+  res.render("index")
+})
 
+const PORT = 3000
 app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT} . . . `)
+  console.log("Server running on port 3000")
 })
