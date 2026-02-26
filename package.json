@@ -9,5 +9,25 @@
     "method-override": "^3.0.0",
     "mongoose": "^9.2.2",
     "morgan": "^1.10.1"
-  }
+  },
+  "name": "bloom-pharmacy",
+  "version": "1.0.0",
+  "description": "[GitHub - Fatema](https://github.com/Fatii78) | [LinkedIn - Fatema](https://www.linkedin.com/in/fatema-alnajjas-a57198228)\r [GitHub - YASMIN](PUT_TEAMMATE_GITHUB_LINK_HERE) | [LinkedIn - YASMIN] ()\r ***",
+  "main": "server.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fatii78/BLOOM-PHARMACY.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fatii78/BLOOM-PHARMACY/issues"
+  },
+  "homepage": "https://github.com/Fatii78/BLOOM-PHARMACY#readme"
 }
