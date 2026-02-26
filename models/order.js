@@ -2,10 +2,10 @@ const mongoose = require("mongoose")
 const orderSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    quantity: { type: },
+    quantity: { type: Number},
     image: { type: String },
     price: { type: Number},
-    total price: { type: Number},
+    totalPrice: { type: Number},
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

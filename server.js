@@ -15,7 +15,7 @@ app.set("views", path.join(__dirname, "views"))
 
 const authRouter = require("./routes/authRouter")
 
-const db = require("./db")
+
 
 const PORT = 3000
 
