@@ -1,45 +1,66 @@
-require("dotenv").config({ quiet: true })
+require("dotenv").config()
 const express = require("express")
-const methodOverride = require("method-override")
+const mongoose = require("mongoose")
 const morgan = require("morgan")
+const methodOverride = require("method-override")
 const session = require("express-session")
-
-const { MongoStore } = require("connect-mongo")
-
+const MongoStore = require("connect-mongo").default
 const path = require("path")
 
 const app = express()
+
+const dns = require("dns")
+dns.setServers(["8.8.8.8", "1.1.1.1"])
+
+// const db = require("./db")
+const PORT = 3000
+
+const productRoutes = require("./routes/productRoutes")
+
+// Middleware
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+app.use(morgan("dev"))
+app.use(methodOverride("_method"))
+app.use(express.static(path.join(__dirname, "public")))
+
+// Session
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
+  })
+)
+
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null
+  next()
+})
+
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
 
+// Static Folder
+app.use(express.static("public"))
 
-const authRouter = require("./routes/authRouter")
+// Routes
+app.use("/", productRoutes)
 
-const db = require("./db")
+// DB
+mongoose.connect(process.env.MONGODB_URI)
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB connected")
+})
 
-const PORT = 3000
-
-app.use(express.urlencoded({ extended: false }))
-app.use(express.json())
-app.use(express.static(path.join(__dirname, "public")))
-app.use(methodOverride("_method"))
-app.use(morgan("dev"))
-app.use(
-session({
-secret: process.env.SESSION_SECRET,
-resave: false,
-saveUninitialized: true,
-store: MongoStore.create({
-mongoUrl: process.env.MONGODB_URI,
-}),
-}),
-)
-
-
-app.use("/auth", authRouter)
-
-
+// Routes
+app.get("/", (req, res) => {
+  res.render("index")
+})
 
 app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT} . . . `)
+  console.log("Server running on port 3000")
 })
