@@ -16,7 +16,6 @@ dns.setServers(["8.8.8.8", "1.1.1.1"])
 const PORT = 3000
 
 const productRoutes = require("./routes/productRoutes")
-
 // Middleware
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
@@ -49,7 +48,6 @@ app.use(express.static("public"))
 
 // Routes
 app.use("/", productRoutes)
-
 // DB
 mongoose.connect(process.env.MONGODB_URI)
 mongoose.connection.on("connected", () => {
