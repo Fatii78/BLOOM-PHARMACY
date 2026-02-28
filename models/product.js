@@ -4,19 +4,13 @@ const ProductSchema = new mongoose.Schema(
     name: { type: String, required: true },
     description: { type: String, required: true },
     image: { type: String },
-    price: { type: Number },
-    stock : {type: Number},
+    price: { type: Number, required: true, min: 0  },
+    stock : {type: Number, default: 0, min: 0},
     category: {
   type: String,
-  enum: ["Skincare", "Haircare", "Nails"],
+  enum: ["Skincare", "Haircare", "Nails", "Vitamins"],
   required: true
-},
-    author: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-  },
+}},
   { timestamps: true }
 )
 module.exports = mongoose.model("Product", ProductSchema)

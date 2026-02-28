@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>Products</title></head>
+<body>
+  <h1>Products</h1>
+
+  <% if (selectedCategory) { %>
+    <p>Filtered by: <%= selectedCategory %></p>
+  <% } %>
+
+  <% products.forEach(p => { %>
+    <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
+      <h3><a href="/products/<%= p._id %>"><%= p.name %></a></h3>
+      <p>Price: <%= p.price %> BD</p>
+      <p>Category: <%= p.category %></p>
+    </div>
+  <% }) %>
+</body>
+</html>
