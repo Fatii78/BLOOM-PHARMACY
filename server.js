@@ -45,6 +45,7 @@ mongoose.connection.on("connected", () => {
 app.get("/", (req, res) => {
   res.render("index")
 })
+app.use("/products", require("./routes/productRouter"))
 
 const PORT = 3000
 app.listen(PORT, () => {
